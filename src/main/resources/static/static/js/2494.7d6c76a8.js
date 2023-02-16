@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunkeco_friendly"]=self["webpackChunkeco_friendly"]||[]).push([[2494],{22494:function(e,n,u){u.r(n),u.d(n,{build:function(){return c.b}});u(15626),u(36315),u(26616),u(14009),u(23476),u(99490),u(97195),u(56606),u(70516),u(8953),u(87035),u(73893),u(65982),u(63914),u(81789),u(30150),u(97550);var c=u(95935)}}]);
