@@ -1,0 +1,64 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /*overflow:hidden;*/
+
+}
+
+html,
+body,
+#app{
+    height:100%;
+    margin:0;
+    padding:0;
+    /*background-image: url(../assets//images/bgc.jpg);*/
+
+    background-size: cover;
+    /*margin-left: 5px;*/
+}
+/*让所有斜体不倾斜*/
+em,
+i {
+    font-style: normal;
+}
+/*去掉前面的小店*/
+li {
+    list-style: none;
+}
+/*图片没有边框*/
+img {
+    border:0;
+    vertical-align: middle;
+}
+/*让button按钮变成小手*/
+button {
+    cursor:pointer;
+}
+/*取消链接的下划线*/
+a {
+    color:#666;
+}
+a:hover {
+    color:#e33333;
+}
+.ml-5{
+    margin-right: 5px;
+}
+
+.chart {
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+.com-container {
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+#com-chart  {
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
