@@ -7,6 +7,21 @@
     <el-input style="width: 200px" placeholder="请输入监测站区域" suffix-icon="el-icon-message" class="ml-5" v-model="station"></el-input>
     <el-button icon="el-icon-search" style="position: relative" type="primary" @click="load">搜索</el-button>
     <el-button  icon="el-icon-refresh" type="warning" style="position: relative" @click="reset">重置</el-button>
+    <el-dropdown size="medium">
+      <el-button type="primary" style="position: relative;right: -10%">
+        xx表<i class="el-icon-arrow-down el-icon--right"></i>
+      </el-button>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item>0cm地温表</el-dropdown-item>
+        <el-dropdown-item>本站气压表</el-dropdown-item>
+        <el-dropdown-item>风向风速表</el-dropdown-item>
+        <el-dropdown-item>降水表</el-dropdown-item>
+        <el-dropdown-item>气温表</el-dropdown-item>
+        <el-dropdown-item>日照表</el-dropdown-item>
+        <el-dropdown-item>相对湿度表</el-dropdown-item>
+        <el-dropdown-item>蒸发表</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
   </div>
 
   <div style="margin: 10px 0">
@@ -227,6 +242,15 @@ export default {
 </script>
 
 <style scoped>
+.el-dropdown {
+  vertical-align: top;
+}
+.el-dropdown + .el-dropdown {
+  margin-left: 15px;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
 .headerBg{
   background: #eee!important;
 }

@@ -75,13 +75,13 @@ public class ${table.controllerName} {
         return ${table.entityPath}Service.getById(id);
         }
 
-        @GetMapping("/page")
-  public Page<${entity}> findPage(@RequestParam Integer pageNum,
-        @RequestParam Integer pageSize) {
-        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
-        return ${table.entityPath}Service.page(new Page<>(pageNum, pageSize),queryWrapper);
-
-        }
+##        @GetMapping("/page")
+##  public Page<${entity}> findPage(@RequestParam Integer pageNum,
+##        @RequestParam Integer pageSize) {
+##        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+##        return ${table.entityPath}Service.page(new Page<>(pageNum, pageSize),queryWrapper);
+##
+##        }
 }
 
 #end

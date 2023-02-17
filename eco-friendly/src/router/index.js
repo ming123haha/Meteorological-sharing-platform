@@ -13,7 +13,7 @@ const routes = [{
     redirect: "/login", //首页配置
     children:[
         {
-            path:'InstrumentaManage',name:'InstrumentaManage',component:()=>import('../views/InstrumentaManage')
+            path:'DataPanel',name:'DataPanel',component:()=>import('../views/DataPanel')
         },
         {
             path:'HomeMap',name:'HomeMap',component: ()=>import('../views/HomeMap')

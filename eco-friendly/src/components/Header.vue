@@ -13,11 +13,11 @@
           active-text-color="#3eede7"
           router
           mode="horizontal"
-          style="position: absolute;left: 20%"
+          style="position: absolute;left: 26%"
       >
         <el-menu-item index="/DataAnalysis"><i class="el-icon-map-location" style=""></i>
         地图主页</el-menu-item>
-        <el-menu-item index="/InstrumentaManage"><i class="el-icon-data-analysis" style=""></i>
+        <el-menu-item index="/DataPanel"><i class="el-icon-data-analysis" style=""></i>
         数据面版</el-menu-item>
         <el-menu-item style="position:absolute;right: -195%" index="/datasearch"><i class="el-icon-edit-outline" ></i>
           气象预测</el-menu-item>
@@ -26,6 +26,7 @@
         <!--        <el-menu-item index="/SpatialAnalysis"><i class="el-icon-set-up" style=""></i>-->
         <!--          交易分析</el-menu-item>-->
       </el-menu>
+
 <!--     显示用户名   -->
     <el-dropdown style="position: absolute;right: 20px;cursor: pointer" >
       <span>{{ user.username }}</span> <i class="el-icon-arrow-down" style="color:#fff;margin-left: 5px;margin-top: 25px"></i>
