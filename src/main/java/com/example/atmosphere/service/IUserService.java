@@ -9,10 +9,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  *  服务类
  * </p>
  *
- * @author TQM
- * @since 2022-07-18
+ * @author DYP
+ * @since 2023-01-17
  */
 public interface IUserService extends IService<User> {
 
-    UserDTO login(UserDTO user);
+    UserDTO login(UserDTO userDTO);
+
+
+    User register(UserDTO userDTO);
 }

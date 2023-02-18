@@ -22,14 +22,14 @@ public class CodeGenerator {
                 .packageConfig(builder -> {
                     builder.parent("com.example.atmosphere") // 设置父包名
                             .moduleName(null) // 设置父包模块名
-                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "E:\\各个学科\\论文\\毕业论文\\Atmosphere\\src\\main\\java\\com\\example\\atmosphere\\mapper\\")); // 设置mapperXml生成路径
+                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "E:\\各个学科\\论文\\毕业论文\\Atmosphere\\src\\main\\resources\\mapper\\mapper\\")); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
                     builder.entityBuilder().enableLombok();  //entity层配置
                     builder.controllerBuilder().enableHyphenStyle()  // 开启驼峰转连字符
                             .enableRestStyle();  // 开启生成@RestController 控制器
                     //builder.addInclude("sys_user") // 设置需要生成的表名
-                    builder.addInclude("result_evaporation_merge") // 设置需要生成的表名
+                    builder.addInclude("result_humidity_merge") // 设置需要生成的表名
                             .addTablePrefix("t_", "sys_","result_"); // 设置过滤表前缀  //这里可以更改选择忽略什么sys_ ..
                 })
                 //.templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板

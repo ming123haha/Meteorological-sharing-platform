@@ -9,7 +9,7 @@
       <h1 class="login_title">Please Login</h1>
       <el-form :model="loginForm" :rules="rules" ref="userForm">
         <span style="color:#505458; font-size:18px;position: relative;top:55px;left:-20px"> 用户名 </span>
-        <el-form-item prop="loginName" style="margin:30px 50px;">
+        <el-form-item prop="username" style="margin:30px 50px;">
           <el-input type="text" size="medium" style="width:250px;" prefix-icon="el-icon-user"
                     v-model="loginForm.username" placeholder="请输入用户名" autocomplete="off"></el-input>
         </el-form-item>
@@ -73,7 +73,7 @@ export default {
       });
     },
     register(){
-      this.$router.push({path:'/Register'})
+      this.$router.push({path:'/register'})
     }
   }
 }

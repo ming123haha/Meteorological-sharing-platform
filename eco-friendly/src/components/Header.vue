@@ -32,7 +32,7 @@
       <span>{{ user.username }}</span> <i class="el-icon-arrow-down" style="color:#fff;margin-left: 5px;margin-top: 25px"></i>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item>
-          <router-link to="/login"style="text-decoration: none">退出</router-link>
+          <span style="text-decoration: none" @click="logoout">退出</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>

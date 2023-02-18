@@ -34,8 +34,8 @@ import org.springframework.web.multipart.MultipartFile;
  *  前端控制器
  * </p>
  *
- * @author TQM
- * @since 2022-07-18
+ * @author DYP
+ * @since 2023-01-17
  */
 @RestController
 @RequestMapping("/user")
@@ -55,6 +55,16 @@ public class UserController {
       UserDTO dto=userService.login(userDTO);
 
       return Result.success(dto);
+  }
+
+  @PostMapping("/register")
+  public Result register(@RequestBody UserDTO userDTO){
+      String username = userDTO.getUsername();
+      String password = userDTO.getPassword();
+      if (StrUtil.isBlank(username) || StrUtil.isBlank(password)){
+          return Result.error(Constants.CODE_400,"参数错误");
+      }
+      return Result.success(userService.register(userDTO));
   }
   //新增或更新
   @PostMapping
