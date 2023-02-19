@@ -13,7 +13,7 @@
       </el-button>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item>0cm地温表</el-dropdown-item>
-        <el-dropdown-item>本站气压表</el-dropdown-item>
+        <el-dropdown-item @click.native="Test">本站气压表</el-dropdown-item>
         <el-dropdown-item>风向风速表</el-dropdown-item>
         <el-dropdown-item>降水表</el-dropdown-item>
         <el-dropdown-item>气温表</el-dropdown-item>
@@ -45,17 +45,23 @@
   <el-table :data="tableData" border stripe :header-cell-class-name="headerBg" @selection-change="handleSelectionChange">
     <el-table-column type="selection" width="55"> <!--多选框-->
     </el-table-column>
-    <el-table-column prop="id" label="ID" width="80">
+    <el-table-column prop="stationNumber" label="区站号" width="80">
     </el-table-column>
-    <el-table-column prop="city" label="城市" width="140">
+    <el-table-column prop="latitude" label="纬度" width="140">
     </el-table-column>
-    <el-table-column prop="station" label="监测站区域" width="200">
+    <el-table-column prop="longitude" label="经度" width="200">
     </el-table-column>
-    <el-table-column prop="stationcode" label="监测站编号" width="120">
+    <el-table-column prop="elevationOfObservationStation" label="观测站海拔" width="120">
     </el-table-column>
-    <el-table-column prop="latitude" label="监测站经度" width="200">
+    <el-table-column prop="year" label="年" width="200">
     </el-table-column>
-    <el-table-column prop="longtitude" label="监测站纬度" width="120">
+    <el-table-column prop="month" label="月" width="120">
+    </el-table-column>
+    <el-table-column prop="day" label="日" width="120">
+    </el-table-column>
+    <el-table-column prop=" " label="小型蒸发量" width="120">
+    </el-table-column>
+    <el-table-column prop="largeEvaporationCapacity" label="大型蒸发量" width="120">
     </el-table-column>
     <el-table-column label="操作" >
       <template slot-scope="scope">
@@ -115,7 +121,7 @@
 
 <script>
 export default {
-  name: "InstrumentManage",
+  name: "DataPanel",
   data(){
     return{
       tableData:[],
@@ -123,6 +129,7 @@ export default {
       multipleSelection:[],
       pageNum:1,
       pageSize:15,
+      Station_Number:"",
       id:"",
       city:"",
       station:"",
@@ -138,6 +145,10 @@ export default {
     this.load()
   },
   methods:{
+    Test(){
+      alert("这是一个测试!")
+      console.log("这是一个测试!")
+    },
     handleAdd(){
       this.dialogFormVisible=true
       this.form={}
@@ -164,16 +175,19 @@ export default {
       })
     },
     load() {  //加载
-      this.request.get("/realequipments/page",{
+      this.request.get("/evaporation-merge/page",{
         params:{
           pageNum:this.pageNum,
           pageSize:this.pageSize,
-          city:this.city,
-          station:this.station,
-          latitude:this.latitude,
-          longtitude:this.longtitude,
+          // Station_Number:this.Station_Number,
+          // city:this.city,
+          // station:this.station,
+          // latitude:this.latitude,
+          // longtitude:this.longtitude,
         }
       }).then(res =>{
+        console.log(res)
+
         this.tableData=res.records
         this.total=res.total
       })

@@ -12,7 +12,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/user/login","/**/export","/nowatmospheredata/**","/chzuatmosphere/**","/historyatmospheredata/**","/weekatmospheredata/**","/realequipments/**"); //配置请求是否合法
+                .excludePathPatterns("/user/login","/**/export","/nowatmospheredata/**","/chzuatmosphere/**","/historyatmospheredata/**","/weekatmospheredata/**","/realequipments/**"
+                ,"/evaporation-merge/**","/user/**"); //配置请求是否合法
     }
 
     @Bean

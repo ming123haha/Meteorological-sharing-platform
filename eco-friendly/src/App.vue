@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import TrackingOfPollutants from "@/views/HomeMap"
+import HomeMap from "@/views/HomeMap"
 //import HomeView from "@/views/Manage";
 export default {
-  components: {TrackingOfPollutants}
+  components: {HomeMap}
 }
 </script>
 

@@ -17,13 +17,13 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-  @TableName("result_evaporation_merge")
+@TableName("result_evaporation_merge")
 @ApiModel(value = "EvaporationMerge对象", description = "")
 public class EvaporationMerge implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String stationNumber;
+    private String StationNumber;
 
     private String latitude;
 
