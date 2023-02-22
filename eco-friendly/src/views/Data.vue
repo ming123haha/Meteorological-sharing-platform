@@ -1,7 +1,5 @@
 <template>
 <div>
-
-
   <div style="margin: 10px 0">
     <el-input style="width: 200px" placeholder="请输入你想搜索的内容" suffix-icon="el-icon-search" v-model="username"></el-input>
     <el-input style="width: 200px" placeholder="请输入密码" suffix-icon="el-icon-message" class="ml-5" v-model="password"></el-input>

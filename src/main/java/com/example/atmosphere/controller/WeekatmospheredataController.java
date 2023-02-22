@@ -1,12 +1,10 @@
 package com.example.atmosphere.controller;
 
 
-import com.example.atmosphere.entity.Historyatmospheredata;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;

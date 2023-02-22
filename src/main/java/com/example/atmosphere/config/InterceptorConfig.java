@@ -12,8 +12,9 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/user/login","/**/export","/nowatmospheredata/**","/chzuatmosphere/**","/historyatmospheredata/**","/weekatmospheredata/**",
-                        "/realequipments/**","/user/**"); //配置请求是否合法
+                .excludePathPatterns("/user/login","/**/export","/nowatmospheredata/**","/chzuatmosphere/**","/weekatmospheredata/**",
+                        "/realequipments/**","/user/**","/evaporation-merge/**","/sunshine-merge/**","/groundtemperature-merge/**","/humidity-merge/**","/precipitation-merge/**","/pressure-merge/**",
+                        "/temperature-merge/**","/wind-merge/**"); //配置请求是否合法
     }
 
     @Bean

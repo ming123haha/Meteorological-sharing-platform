@@ -1,5 +1,6 @@
 package com.example.atmosphere.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -12,8 +13,8 @@ import lombok.Setter;
  * 
  * </p>
  *
- * @author TQM
- * @since 2023-02-17
+ * @author DYP
+ * @since 2023-02-18
  */
 @Getter
 @Setter
@@ -23,7 +24,7 @@ public class EvaporationMerge implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String stationNumber;
+    private String StationNumber;
 
     private String latitude;
 

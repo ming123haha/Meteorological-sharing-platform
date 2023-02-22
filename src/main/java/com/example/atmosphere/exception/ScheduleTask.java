@@ -1,15 +1,11 @@
 package com.example.atmosphere.exception;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.atmosphere.HttpUtils;
 import com.example.atmosphere.entity.Chzuatmosphere;
-import com.example.atmosphere.entity.Historyatmospheredata;
 import com.example.atmosphere.entity.Nowatmospheredata;
 import com.example.atmosphere.entity.Weekatmospheredata;
 import com.example.atmosphere.service.IChzuatmosphereService;
-import com.example.atmosphere.service.IHistoryatmospheredataService;
 import com.example.atmosphere.service.INowatmospheredataService;
 import com.example.atmosphere.service.IWeekatmospheredataService;
 import org.apache.http.HttpResponse;
@@ -17,12 +13,10 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @EnableScheduling  //定时任务注解
@@ -35,8 +29,7 @@ public class ScheduleTask {
     private IWeekatmospheredataService weekatmospheredataService;
     @Resource
     private IChzuatmosphereService ChzuatmosphereService;
-    @Resource
-    private IHistoryatmospheredataService historyatmospheredataService;
+
     private String[] s_Code = new String[]{
             "1270A", "1271A", "1272A", "1273A", "1274A", "1275A",
             "1276A", "1277A", "1278A", "1279A", "3464A", "1794A", "1795A", "1796A", "1797A", "3328A",
@@ -254,24 +247,6 @@ public class ScheduleTask {
                  String resData = EntityUtils.toString(response.getEntity());
                  JSONObject responseJSON = JSONObject.parseObject(resData);
                  JSONObject dataarray = responseJSON.getJSONObject("data");  //这里实际不是array，而是object对象
-
-
-                 //History实体类注入数据
-                 Historyatmospheredata historyatmospheredata = new Historyatmospheredata();
-                 historyatmospheredata.setAqi(dataarray.getString("AQI"));
-                 historyatmospheredata.setCo(dataarray.getString("CO"));
-                 historyatmospheredata.setNo2(dataarray.getString("NO2"));
-                 historyatmospheredata.setO3(dataarray.getString("O3"));
-                 historyatmospheredata.setPm25(dataarray.getString("PM2_5"));
-                 historyatmospheredata.setPm10(dataarray.getString("PM10"));
-                 historyatmospheredata.setSo2(dataarray.getString("SO2"));
-                 historyatmospheredata.setCity(dataarray.getString("city"));
-                 historyatmospheredata.setCitycode(dataarray.getString("city_code"));
-                 historyatmospheredata.setPubtime(dataarray.getString("pubtime"));
-                 historyatmospheredata.setQuality(dataarray.getString("quality"));
-                 historyatmospheredata.setStation(dataarray.getString("station"));
-                 historyatmospheredata.setStationcode(dataarray.getString("station_code"));
-                 historyatmospheredataService.saveOrUpdate(historyatmospheredata);
 
 
                  System.out.println("插入了一条数据!");

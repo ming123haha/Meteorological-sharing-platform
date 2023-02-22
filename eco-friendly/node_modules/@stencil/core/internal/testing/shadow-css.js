@@ -55,15 +55,15 @@ const _parenSuffix = ")(?:\\(((?:\\([^)(]*\\)|[^)(]*)+?)\\))?([^,{]*)", _cssColo
    return c;
   }, r = (e => {
    const t = [];
-   let o, s = 0;
-   return o = (e = e.replace(/(\[[^\]]*\])/g, ((e, o) => {
-    const c = `__ph-${s}__`;
-    return t.push(o), s++, c;
-   }))).replace(/(:nth-[-\w]+)(\([^)]+\))/g, ((e, o, c) => {
-    const r = `__ph-${s}__`;
-    return t.push(c), s++, o + r;
-   })), {
-    content: o,
+   let o = 0;
+   return {
+    content: (e = e.replace(/(\[[^\]]*\])/g, ((e, s) => {
+     const c = `__ph-${o}__`;
+     return t.push(s), o++, c;
+    }))).replace(/(:nth-[-\w]+)(\([^)]+\))/g, ((e, s, c) => {
+     const r = `__ph-${o}__`;
+     return t.push(c), o++, s + r;
+    })),
     placeholders: t
    };
   })(e);

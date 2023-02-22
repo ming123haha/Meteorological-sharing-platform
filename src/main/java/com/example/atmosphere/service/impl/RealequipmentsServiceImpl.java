@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
  *  服务实现类
  * </p>
  *
- * @author TQM
- * @since 2022-07-22
+ * @author DYP
+ * @since 2023-01-19
  */
 @Service
 public class RealequipmentsServiceImpl extends ServiceImpl<RealequipmentsMapper, Realequipments> implements IRealequipmentsService {

@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  *  服务类
  * </p>
  *
- * @author TQM
- * @since 2023-02-17
+ * @author DYP
+ * @since 2023-02-18
  */
 public interface IEvaporationMergeService extends IService<EvaporationMerge> {
 

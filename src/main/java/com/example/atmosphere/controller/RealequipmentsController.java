@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
  *  前端控制器
  * </p>
  *
- * @author TQM
- * @since 2022-07-22
+ * @author DYP
+ * @since 2023-01-19
  */
 @RestController
 @RequestMapping("/realequipments")
@@ -66,15 +66,11 @@ public class RealequipmentsController {
   public Page<Realequipments> findPage(
           @RequestParam Integer pageNum,
           @RequestParam Integer pageSize,
-          @RequestParam (defaultValue = "")String city,
           @RequestParam (defaultValue = "")String station,
           @RequestParam (defaultValue = "")String stationCode,
           @RequestParam (defaultValue = "")String latitude,
           @RequestParam (defaultValue = "")String longtitude) {
   QueryWrapper<Realequipments> queryWrapper=new QueryWrapper<>();
-      if(!"".equals(city)){
-          queryWrapper.like("city",city);
-      }
       if(!"".equals(station)){
           queryWrapper.like("station",station);
       }
@@ -98,10 +94,6 @@ public class RealequipmentsController {
         //在内存操作，写入到浏览器中
         ExcelWriter writer = ExcelUtil.getWriter(true);
         //自定义标题别名
-//      writer.addHeaderAlias("id","ID");
-//      writer.addHeaderAlias("username","用户名");
-//      writer.addHeaderAlias("password","密码");
-//      writer.addHeaderAlias("createtime","创建时间");
 
 
         //一次性写出list内的对象到excel，使用默认样式，强制输出标题

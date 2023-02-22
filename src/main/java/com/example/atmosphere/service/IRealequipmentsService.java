@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  *  服务类
  * </p>
  *
- * @author TQM
- * @since 2022-07-22
+ * @author DYP
+ * @since 2023-01-19
  */
 public interface IRealequipmentsService extends IService<Realequipments> {
 

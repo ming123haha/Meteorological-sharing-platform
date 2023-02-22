@@ -49,6 +49,9 @@ export interface JsonDocsProp {
     name: string;
     type: string;
     mutable: boolean;
+    /**
+     * The name of the attribute that is exposed to configure a compiled web component
+     */
     attr?: string;
     reflectToAttr: boolean;
     docs: string;
