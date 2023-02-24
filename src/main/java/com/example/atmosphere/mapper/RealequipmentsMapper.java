@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  *  Mapper 接口
  * </p>
  *
- * @author TQM
- * @since 2022-07-22
+ * @author DYP
+ * @since 2023-01-19
  */
 public interface RealequipmentsMapper extends BaseMapper<Realequipments> {
 

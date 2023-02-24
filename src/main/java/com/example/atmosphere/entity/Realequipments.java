@@ -14,8 +14,8 @@ import lombok.Setter;
  * 
  * </p>
  *
- * @author TQM
- * @since 2022-07-22
+ * @author DYP
+ * @since 2023-01-19
  */
 @Getter
 @Setter
@@ -27,8 +27,6 @@ public class Realequipments implements Serializable {
 
       @TableId(value = "id", type = IdType.AUTO)
       private Integer id;
-
-    private String city;
 
     private String station;
 

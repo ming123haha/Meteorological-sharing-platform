@@ -1,6 +1,5 @@
 package com.example.atmosphere.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -14,17 +13,17 @@ import lombok.Setter;
  * </p>
  *
  * @author DYP
- * @since 2023-02-18
+ * @since 2023-02-17
  */
 @Getter
 @Setter
-  @TableName("result_evaporation_merge")
-@ApiModel(value = "EvaporationMerge对象", description = "")
-public class EvaporationMerge implements Serializable {
+  @TableName("result_humidity_merge")
+@ApiModel(value = "HumidityMerge对象", description = "")
+public class HumidityMerge implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String StationNumber;
+    private String stationNumber;
 
     private String latitude;
 
@@ -38,9 +37,9 @@ public class EvaporationMerge implements Serializable {
 
     private String day;
 
-    private String smallEvaporationCapacity;
+    private String averageRelativeHumidity;
 
-    private String largeEvaporationCapacity;
+    private String minimumRelativeHumidity;
 
 
 }

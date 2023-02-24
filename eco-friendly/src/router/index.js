@@ -38,7 +38,6 @@ const routes = [{
         name:'Register',
         component:()=>import('../views/Register')
     }
-
 ]
 
 const router = new VueRouter({

@@ -12,7 +12,6 @@
     <div>
       <echartsWatch v-show="showinfo" ref="echartsWatch" :selectstaion="thisstation" />
     </div>
-
   </div>
 
 </template>

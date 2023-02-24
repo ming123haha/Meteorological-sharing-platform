@@ -1,6 +1,6 @@
 package com.example.atmosphere.service;
 
-import com.example.atmosphere.entity.Realequipments;
+import com.example.atmosphere.entity.HumidityMerge;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author DYP
- * @since 2023-01-19
+ * @since 2023-02-17
  */
-public interface IRealequipmentsService extends IService<Realequipments> {
+public interface IHumidityMergeService extends IService<HumidityMerge> {
 
 }

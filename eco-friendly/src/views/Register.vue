@@ -3,7 +3,7 @@
   <div id="div">
     <video id="video" muted src="../assets/background.mp4" autoplay loop></video>
     <div style="position:relative;top:100px" class="title">
-      <h1 style="color: #505458">基于WebGIS的安徽省气象数据信息共享平台</h1>
+      <h1 class="h1style">基于WebGIS的安徽省气象数据信息共享平台</h1>
     </div>
     <div class="container">
       <h1 class="register_title">Please Register</h1>
@@ -207,11 +207,25 @@ button:hover {
   outline: 0;
 
 }
-.title h1 {
-  font-size: 60px;
-  font-family: '宋体';
-  float: left;
+
+.h1style{
+  font-size: var(--calcite-font-size-8);
+  text-align: center;
+  background-image: linear-gradient(
+      to right,
+      rgb(144,168,185),
+      rgb(150,165,183),
+      rgb(219,224,232)
+  );
+  font-weight:bold;
+  color:transparent;
+  background-clip:text
 }
+/*.title h1 {*/
+/*  font-size: 60px;*/
+/*  font-family: '宋体';*/
+/*  float: left;*/
+/*}*/
 
 
 #video {

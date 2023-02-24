@@ -1,6 +1,6 @@
 package com.example.atmosphere.mapper;
 
-import com.example.atmosphere.entity.EvaporationMerge;
+import com.example.atmosphere.entity.HumidityMerge;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author DYP
- * @since 2023-02-18
+ * @since 2023-02-17
  */
-public interface EvaporationMergeMapper extends BaseMapper<EvaporationMerge> {
+public interface HumidityMergeMapper extends BaseMapper<HumidityMerge> {
 
 }

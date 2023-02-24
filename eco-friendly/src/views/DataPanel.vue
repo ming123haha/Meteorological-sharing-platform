@@ -9,17 +9,17 @@
     <el-button  icon="el-icon-refresh" type="warning" style="position: relative" @click="reset">重置</el-button>
     <el-dropdown size="medium">
       <el-button type="primary" style="position: relative;right: -10%">
-        xx表<i class="el-icon-arrow-down el-icon--right"></i>
+        {{ tablename }}<i class="el-icon-arrow-down el-icon--right"></i>
       </el-button>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>0cm地温表</el-dropdown-item>
-        <el-dropdown-item @click.native="Test">本站气压表</el-dropdown-item>
-        <el-dropdown-item>风向风速表</el-dropdown-item>
-        <el-dropdown-item>降水表</el-dropdown-item>
-        <el-dropdown-item>气温表</el-dropdown-item>
-        <el-dropdown-item>日照表</el-dropdown-item>
-        <el-dropdown-item>相对湿度表</el-dropdown-item>
-        <el-dropdown-item>蒸发表</el-dropdown-item>
+        <el-dropdown-item @click.native="ground">0cm地温表</el-dropdown-item>
+        <el-dropdown-item @click.native="pressure">本站气压表</el-dropdown-item>
+        <el-dropdown-item @click.native="wind">风向风速表</el-dropdown-item>
+        <el-dropdown-item @click.native="precipitation">降水表</el-dropdown-item>
+        <el-dropdown-item @click.native="temperature">气温表</el-dropdown-item>
+        <el-dropdown-item @click.native="sunshine">日照表</el-dropdown-item>
+        <el-dropdown-item @click.native="humidity">相对湿度表</el-dropdown-item>
+        <el-dropdown-item @click.native="evaporation">蒸发表</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -38,7 +38,7 @@
       <el-button type="danger" class="ml-5" slot="reference" >批量删除 <i class="el-icon-remove-outline"></i> </el-button>
     </el-popconfirm>
 
-<!--    <el-button type="primary" class="ml-5">导入 <i class="el-icon-bottom"></i> </el-button>-->
+    <el-button type="primary" class="ml-5">导入 <i class="el-icon-bottom"></i> </el-button>
     <el-button type="primary" class="ml-5" @click="exp">导出<i class="el-icon-top"></i> </el-button>
   </div>
 
@@ -47,21 +47,27 @@
     </el-table-column>
     <el-table-column prop="stationNumber" label="区站号" width="80">
     </el-table-column>
-    <el-table-column prop="latitude" label="纬度" width="140">
+    <el-table-column prop="latitude" label="纬度" width="80">
     </el-table-column>
-    <el-table-column prop="longitude" label="经度" width="200">
+    <el-table-column prop="longitude" label="经度" width="80">
     </el-table-column>
-    <el-table-column prop="elevationOfObservationStation" label="观测站海拔" width="120">
+    <el-table-column prop="elevationOfObservationStation" label="观测场拔海高度" width="120">
     </el-table-column>
-    <el-table-column prop="year" label="年" width="200">
+    <el-table-column prop="year" label="年" width="80">
     </el-table-column>
-    <el-table-column prop="month" label="月" width="120">
+    <el-table-column prop="month" label="月" width="50">
     </el-table-column>
-    <el-table-column prop="day" label="日" width="120">
+    <el-table-column prop="day" label="日" width="50">
     </el-table-column>
-    <el-table-column prop=" " label="小型蒸发量" width="120">
+    <el-table-column :prop="dynamicprop1" :label="dynamiclabel1" width="100" v-if="show1">
     </el-table-column>
-    <el-table-column prop="largeEvaporationCapacity" label="大型蒸发量" width="120">
+    <el-table-column :prop="dynamicprop2" :label="dynamiclabel2" width="110" v-if="show2">
+    </el-table-column>
+    <el-table-column :prop="dynamicprop3" :label="dynamiclabel3" width="110" v-if="show3">
+    </el-table-column>
+    <el-table-column :prop="dynamicprop4" :label="dynamiclabel4" width="110" v-if="show4">
+    </el-table-column>
+    <el-table-column :prop="dynamicprop5" :label="dynamiclabel5" width="110" v-if="show5">
     </el-table-column>
     <el-table-column label="操作" >
       <template slot-scope="scope">
@@ -92,22 +98,34 @@
     </el-pagination>
   </div>
 
-  <el-dialog title="添加监测点" :visible.sync="dialogFormVisible" width="50%" >
+  <el-dialog title="添加蒸发数据" :visible.sync="dialogFormVisible" width="50%" >
     <el-form label-width="100px" size="small">
-      <el-form-item label="城市">
-        <el-input v-model="form.city" autocomplete="off"></el-input>
+      <el-form-item label="区站号">
+        <el-input v-model="form.stationname" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="监测站区域">
-        <el-input v-model="form.station" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="监测站编号">
-        <el-input v-model="form.stationcode" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="监测站经度">
+      <el-form-item label="纬度">
         <el-input v-model="form.latitude" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="监测站纬度">
-        <el-input v-model="form.longtitude" autocomplete="off"></el-input>
+      <el-form-item label="经度">
+        <el-input v-model="form.longitude" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="观测场拔海高度">
+        <el-input v-model="form.elevationofobservationstation" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="年">
+        <el-input v-model="form.year" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="月">
+        <el-input v-model="form.month" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="日">
+        <el-input v-model="form.day" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="小型蒸发量">
+        <el-input v-model="form.smallEvaporationCapacity" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="大型蒸发量">
+        <el-input v-model="form.largeEvaporationCapacity" autocomplete="off"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -120,35 +138,54 @@
 </template>
 
 <script>
+// import show from "vue/src/platforms/web/runtime/directives/show";
+
 export default {
   name: "DataPanel",
+  computed: {
+    show() {
+      return show
+    }
+  },
   data(){
     return{
+
+      dynamicprop1:"smallEvaporationCapacity",
+      dynamicprop2:"largeEvaporationCapacity",
+      dynamicprop3:"averageSurfaceTemperature",
+      dynamicprop4:"dailyMaximumSurfaceTemperature",
+      dynamicprop5:"dailyMinimumSurfaceTemperature",
+
+      dynamiclabel1:"小型蒸发量",
+      dynamiclabel2:"大型蒸发量",
+      dynamiclabel3:"平均地表气温",
+      dynamiclabel4:"日最高地表气温",
+      dynamiclabel5:"日最低地表气温",
+
+
+      show1:false,
+      show2:false,
+      show3:false,
+      show4:false,
+      show5:false,
+      tablename:"",
       tableData:[],
       total:0,
       multipleSelection:[],
       pageNum:1,
-      pageSize:15,
+      pageSize:10,
       Station_Number:"",
       id:"",
-      city:"",
-      station:"",
-      stationcode:"",
-      latitude:"",
-      longtitude:"",
       dialogFormVisible:false,
       form:{},
-      headerBg:'headerBg'
+      headerBg:'headerBg',
+
     }
   },
   created() {
     this.load()
   },
   methods:{
-    Test(){
-      alert("这是一个测试!")
-      console.log("这是一个测试!")
-    },
     handleAdd(){
       this.dialogFormVisible=true
       this.form={}
@@ -165,7 +202,7 @@ export default {
       //批量删除
       let ids=this.multipleSelection.map(v =>v.id)   //[{} ,{} ,{}] =>[1,2,3]
       console.log(ids)
-      request.post("/realequipments/del/batch",ids).then(res=>{
+      request.post("/evaporation-merge/del/batch",ids).then(res=>{
         if(res){
           this.$message.success("批量删除成功!")
           this.load()
@@ -179,21 +216,18 @@ export default {
         params:{
           pageNum:this.pageNum,
           pageSize:this.pageSize,
-          // Station_Number:this.Station_Number,
-          // city:this.city,
-          // station:this.station,
-          // latitude:this.latitude,
-          // longtitude:this.longtitude,
         }
       }).then(res =>{
+        this.show1=true
+        this.show2=true
         console.log(res)
-
+        this.tablename='蒸发表'
         this.tableData=res.records
         this.total=res.total
       })
     },
     save(){  //保存
-      this.request.post("/realequipments",this.form).then(res=>{
+      this.request.post("/evaporation-merge",this.form).then(res=>{
         if(res){
           this.$message.success("保存成功!")
           this.dialogFormVisible=false
@@ -204,7 +238,7 @@ export default {
       })
     },
     del(id){  //删除
-      this.request.delete("/realequipments/"+id).then(res=>{
+      this.request.delete("/evaporation-merge/"+id).then(res=>{
         if(res){
           this.$message.success("删除成功!")
           this.dialogFormVisible=false
@@ -215,7 +249,7 @@ export default {
       })
     },
     exp(){  //导出
-      window.open("http://localhost:9090/realequipments/export")  //后台导出链接
+      window.open("http://localhost:9090/evaporation-merge/export")  //后台导出链接
     },
 
 
@@ -249,7 +283,226 @@ export default {
       console.log(pageNum)
       this.pageNum = pageNum
       this.load()
+    },
+    ground(){
+      this.show1=true
+      this.show2=true
+      this.show3=true
+      this.show4=false
+      this.show5=false
+      this.dynamicprop1 = "averageSurfaceTemperature"
+      this.dynamicprop2 = "dailyMaximumSurfaceTemperature"
+      this.dynamicprop3 = "dailyMinimumSurfaceTemperature"
+
+      this.dynamiclabel1="平均地表气温"
+      this.dynamiclabel2="日最高地表气温"
+      this.dynamiclabel3="日最低地表气温"
+
+      this.tablename='0cm地温表'
+      this.tableData=""
+      this.total=""
+      this.request.get("/groundtemperature-merge/page",{
+        params:{
+          pageNum:this.pageNum,
+          pageSize:this.pageSize,
+        }
+      }).then(res =>{
+        console.log(res)
+        this.tablename='0cm地温表'
+        this.tableData=res.records
+        this.total=res.total
+      })
+    },
+    pressure(){
+      this.show1=true
+      this.show2=true
+      this.show3=true
+      this.show4=false
+      this.show5=false
+      this.dynamicprop1 = "averageLocalAirPressure"
+      this.dynamicprop2 = "dailyMaximumLocalAirPressure"
+      this.dynamicprop3 = "dailyMinimumLocalAirPressure"
+
+      this.dynamiclabel1="平均本站气压"
+      this.dynamiclabel2="日最高本站气压"
+      this.dynamiclabel3="日最低本站气压"
+
+      this.tablename='本站气压表'
+      this.tableData=""
+      this.total=""
+      this.request.get("/pressure-merge/page",{
+        params:{
+          pageNum:this.pageNum,
+          pageSize:this.pageSize,
+        }
+      }).then(res =>{
+        console.log(res)
+        this.tablename='本站气压表'
+        this.tableData=res.records
+        this.total=res.total
+      })
+    },
+    wind(){
+      this.show1=true
+      this.show2=true
+      this.show3=true
+      this.show4=true
+      this.show5=true
+      this.dynamicprop1 = "averageWindSpeed"
+      this.dynamicprop2 = "maximumWindSpeed"
+      this.dynamicprop3 = "windDirectionOfMaximumWindSpeed"
+      this.dynamicprop4 = "extremeWindSpeed"
+      this.dynamicprop5 = "windDirectionOfExtremeWindSpeed"
+
+      this.dynamiclabel1="平均风速"
+      this.dynamiclabel2="最大风速"
+      this.dynamiclabel3="最大风速的风向"
+      this.dynamiclabel4="极大风速"
+      this.dynamiclabel5="极大风速的风向"
+
+      this.tablename='风向风速表'
+      this.tableData=""
+      this.total=""
+      this.request.get("/wind-merge/page",{
+        params:{
+          pageNum:this.pageNum,
+          pageSize:this.pageSize,
+        }
+      }).then(res =>{
+        console.log(res)
+        this.tablename='风向风速表'
+        this.tableData=res.records
+        this.total=res.total
+      })
+    },
+    precipitation(){
+      this.dynamicprop1 = "PrecipitationAt208Hours"
+      this.dynamicprop2 = "precipitationAt820Hours"
+      this.dynamicprop3 = "cumulativePrecipitationAt2020Hours"
+
+      this.dynamiclabel1="20-8时降水量"
+      this.dynamiclabel2="8-20时降水量"
+      this.dynamiclabel3="20-20时累计降水量"
+      this.tablename='降水表'
+      this.tableData=""
+      this.total=""
+      this.request.get("/precipitation-merge/page",{
+        params:{
+          pageNum:this.pageNum,
+          pageSize:this.pageSize,
+        }
+      }).then(res =>{
+        console.log(res)
+        this.tablename='降水表'
+        this.tableData=res.records
+        this.total=res.total
+      })
+    },
+    temperature(){
+      this.show1=true
+      this.show2=true
+      this.show3=true
+      this.show4=false
+      this.show5=false
+      this.dynamicprop1 = "averageTemperature"
+      this.dynamicprop2 = "dailyMaximumTemperature"
+      this.dynamicprop3 = "dailyMinimumTemperature"
+
+      this.dynamiclabel1="平均气温"
+      this.dynamiclabel2="日最高气温"
+      this.dynamiclabel3="日最低气温"
+
+      this.tablename='气温表'
+      this.tableData=""
+      this.total=""
+      this.request.get("/temperature-merge/page",{
+        params:{
+          pageNum:this.pageNum,
+          pageSize:this.pageSize,
+        }
+      }).then(res =>{
+        console.log(res)
+        this.tablename='气温表'
+        this.tableData=res.records
+        this.total=res.total
+      })
+    },
+    sunshine(){
+      this.show1=true
+      this.show2=false
+      this.show3=false
+      this.show4=false
+      this.show5=false
+      this.dynamicprop1 = "sunlightHours"
+      this.dynamiclabel1="日照时数"
+      this.tablename='日照表'
+      this.tableData=""
+      this.total=""
+      this.request.get("/sunshine-merge/page",{
+        params:{
+          pageNum:this.pageNum,
+          pageSize:this.pageSize,
+        }
+      }).then(res =>{
+        console.log(res)
+        this.tablename='日照表'
+        this.tableData=res.records
+        this.total=res.total
+      })
+    },
+    humidity(){
+      this.show1=true
+      this.show2=true
+      this.show3=false
+      this.show4=false
+      this.show5=false
+      this.dynamicprop1 = "averageRelativeHumidity"
+      this.dynamicprop2 = "minimumRelativeHumidity"
+
+      this.dynamiclabel1="平均相对湿度"
+      this.dynamiclabel2="最小相对湿度"
+      this.tablename='相对湿度表'
+      this.tableData=""
+      this.total=""
+      this.request.get("/humidity-merge/page",{
+        params:{
+          pageNum:this.pageNum,
+          pageSize:this.pageSize,
+        }
+      }).then(res =>{
+        console.log(res)
+        this.tablename='相对湿度表'
+        this.tableData=res.records
+        this.total=res.total
+      })
+    },
+    evaporation(){
+      this.show1=true
+      this.show2=true
+      this.show3=false
+      this.show4=false
+      this.show5=false
+      this.dynamicprop1 = "smallEvaporationCapacity",
+      this.dynamicprop2 = "largeEvaporationCapacity",
+
+      this.dynamiclabel1 = "小型蒸发量",
+      this.dynamiclabel2 =" 大型蒸发量",
+      this.tablename ='蒸发表'
+      this.tableData =""
+      this.total=""
+      this.request.get("/evaporation-merge/page",{
+        params:{
+          pageNum:this.pageNum,
+          pageSize:this.pageSize,
+        }
+      }).then(res =>{
+        console.log(res)
+        this.tablename='蒸发表'
+        this.tableData=res.records
+        this.total=res.total
+      })
     }
+
   }
 
 }

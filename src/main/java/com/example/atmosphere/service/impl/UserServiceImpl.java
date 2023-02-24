@@ -50,7 +50,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             throw new ServiceException(Constants.CODE_600,"用户已存在！");
         }
         return one;
-
     }
 
     private User getUserInfo(UserDTO userDTO){
