@@ -13,5 +13,4 @@ import java.util.Map;
 @RequestMapping("/echarts")
 public class EchartsController {
 
-
 }

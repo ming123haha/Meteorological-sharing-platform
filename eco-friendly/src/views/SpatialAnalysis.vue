@@ -1,8 +1,5 @@
 <template>
-
   <body>
-  <h1>这是哪个界面！</h1>
-
   <div id="viewDiv"></div>
   <link
       rel="stylesheet"
@@ -34,8 +31,6 @@ export default {
         }
       });
 
-
-
       // const map = new Map({
       //   basemap: "satellite",
       //   ground: "world-elevation"
@@ -60,14 +55,14 @@ export default {
           }
         }
       });
-      // const weatherExpand = new Expand({
-      //   view: view,
-      //   content: new Weather({
-      //     view: view
-      //   }),
-      //   group: "top-right",
-      //   expanded: true
-      // });
+      const weatherExpand = new Expand({
+        view: view,
+        content: new Weather({
+          view: view
+        }),
+        group: "top-right",
+        expanded: true
+      });
 
       const daylightExpand = new Expand({
         view: view,
@@ -105,8 +100,6 @@ body {
   margin: 0;
   padding: 0;
 }
-
-
 
 #viewDiv {
   height: 100%;

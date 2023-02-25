@@ -1,7 +1,6 @@
 <template>
   <div style="">
     <div style="position: absolute;top:50%;left: 50%;transform: translate(-50%,-50%)">
-<!--      <img src="../assets/logo.png" style="height: 40px;margin-right: 8px" alt="">-->
       <span class="neon" style="font-size: 18px">
         基于WebGIS的安徽省气象数据信息共享平台
       </span>
@@ -13,23 +12,23 @@
           active-text-color="#3eede7"
           router
           mode="horizontal"
-          style="position: absolute;left: 26%"
+          style="position: absolute;left: 15%"
       >
-        <el-menu-item index="/DataAnalysis"><i class="el-icon-map-location" style=""></i>
+        <el-menu-item index="/DataAnalysis"><i class="el-icon-map-location" style=" "></i>
         地图主页</el-menu-item>
         <el-menu-item index="/DataPanel"><i class="el-icon-data-analysis" style=""></i>
         数据面版</el-menu-item>
-        <el-menu-item style="position:absolute;right: -195%" index="/datasearch"><i class="el-icon-edit-outline" ></i>
-          气象预测</el-menu-item>
-        <el-menu-item style="position:absolute;left: 295%" index="/HomeMap"><i class="el-icon-set-up" style=""></i>
-          空间插值</el-menu-item>
+        <el-menu-item style="position:absolute;right: -250%" index="/datasearch"><i class="el-icon-edit-outline" ></i>
+        气象预测</el-menu-item>
+        <el-menu-item style="position:absolute;left: 355%" index="/HomeMap"><i class="el-icon-set-up" style=""></i>
+        空间插值</el-menu-item>
         <!--        <el-menu-item index="/SpatialAnalysis"><i class="el-icon-set-up" style=""></i>-->
         <!--          交易分析</el-menu-item>-->
       </el-menu>
 
 <!--     显示用户名   -->
     <el-dropdown style="position: absolute;right: 20px;cursor: pointer" >
-      <span>{{ user.username }}</span> <i class="el-icon-arrow-down" style="color:#fff;margin-left: 5px;margin-top: 25px"></i>
+      <span>{{ user.username }}</span> <i class="el-icon-arrow-down" style="color:#fff;margin-left: 10px;margin-top: 25px"></i>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item>
           <span style="text-decoration: none" @click="logoout">退出</span>
