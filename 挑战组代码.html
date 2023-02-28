@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Demo</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.24/"></script>
+    <style>
+      html,body,#viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      /* 工具条div */
+      #toolbars{
+        border:2px solid rgba(51, 133, 255, 0.3);
+        background-color: white;
+        width: 740px;
+        height: 36px;
+        position: absolute;
+        bottom:15px;
+        left: 560px;
+        display: flex; /* 设置展示方式 平铺还是竖直 */
+        flex-direction: row;
+        flex-wrap: nowrap;
+        border-radius: 20px;
+
+      }
+
+      #toolbars label{
+        cursor: pointer;
+        margin-top: 6px;
+        margin-left: 10px;
+        margin-right: 10px;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.9)
+      }
+
+      /* 量测工具 */
+      #toolbarDiv{
+        position: absolute;
+        top:27px;
+        left: 1250px;
+        cursor: pointer;
+        display: flex; 
+        flex-direction: row;
+        flex-wrap: nowrap;
+      }
+
+      #toolbarDiv button{
+        border: none;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px; 
+      }
+
+      
+      #SearchDiv {
+        top:25px;
+        left: 700px;
+        position: absolute;
+        width: 538px;
+        height: 36px;
+        border:2px solid rgba(51, 133, 255, 0.3);
+        /* 设置圆角矩形半径 */
+        border-radius: 20px; 
+      }
+
+      #SearchDiv input{
+        /* "\5B8B\4F53" 就是宋体的意思 这样浏览器兼容性比较好 */
+        font-family: Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif;
+        /* 默认有灰色边框我们需要手动去掉 */
+        border: 0px;
+        /* 去掉外框线 */
+        outline: none; 
+        float: left;
+        width: 454px;
+        height: 30px;
+        padding-left: 10px;
+        /* 设置圆角矩形半径 */
+        border-radius: 20px; 
+      }
+
+      #SearchDiv button{
+        float: left;
+        width: 80px;
+        height: 33px;
+        background-color: rgba(51, 133, 255, 0.8);
+        font-size: 16px;
+        color: #fff;
+        /* 设置圆角矩形半径 */
+        border-radius: 12px; 
+      }
+
+      #overviewDiv {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        width: 300px;
+        height: 200px;
+        border: 1px solid black;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      #extentDiv {
+        background-color: rgba(0, 0, 0, 0.5);
+        position: absolute;
+        z-index: 2;
+      }
+
+      #fullExtentDiv{
+        position: absolute;  
+        top:48px;
+        left:60px;
+      }
+      #fullExtentDiv input{
+        /* 设置没有边框 */
+        border: none;
+        /* 设置背景阴影颜色和 大小样式 */
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px; 
+      }
+      #infoDiv{
+        position: absolute;
+        top:27px;
+        left:660px;
+        
+      }
+      #infoDiv input{
+        /* 设置没有边框 */
+        border: none;
+        /* 设置背景阴影颜色和 大小样式 */
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px; 
+      }
+
+      #AddFeatureDataset{
+        position: absolute;
+        top:85px;
+        left:60px;
+      }
+
+      #AddFeatureDataset input{
+        /* 设置没有边框 */
+        border: none;
+        /* 设置背景阴影颜色和 大小样式 */
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px; 
+      }
+      #AddGridDataset{
+        position: absolute;
+        top:125px;
+        left:60px;
+      }
+
+      #AddGridDataset input{
+        /* 设置没有边框 */
+        border: none;
+        /* 设置背景阴影颜色和 大小样式 */
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px; 
+      }
+      .container {
+        display: flex;
+        flex: 1;
+        width: 750px;
+        height: 500px;
+        position: absolute;
+        top:150px;
+        left: 150px; 
+        
+      }
+
+      .hidden {
+        display: none;
+      }
+      /* .esri-view-height-medium .esri-ui-corner .esri-component.esri-widget--panel{
+        max-height: 540px;
+        position: absolute;
+        bottom: 740px;
+      } */
+    </style>
+    <body>
+      <div id="viewDiv"></div>
+      <div id="fullExtent" style="position:absolute;top:27px;left: 594px">
+        <button title="全图显示" id="fullextent-btn" class="esri-widget--button esri-interactive esri-icon-zoom-out-fixed" style="border: none;box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px; "></button>
+      </div>
+      <!-- 图层表div -->
+      <div id="tableContainer" class="container hidden"></div>
+      <!-- 图层表的div -->
+      <div id="TableList"style="position:absolute;top:27px;left: 1346px;box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px; "></div>
+      <!-- 切换底图的div -->
+      <div id="BasemapGallery" style="position:absolute;top:27px;left: 1378px;box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px; "></div>
+      <!-- 查询的div -->
+      <div id="searchPlace"style="position:absolute;top:27px;left: 60px;""></div>
+      <!-- home的div -->
+      <div id="homeWidget" style="position:absolute;top:27px;left: 627px;box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px; "></div>
+      <!-- 导出的div -->
+      <div id="printMap"  style="position:absolute;top:27px;left: 1410px;box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px; "></div>
+      <!-- 工具条区域 -->
+      <div id="toolbars">       
+        <label>
+        <input
+          type = "button"
+          id="addFeatureLayer-btn"
+          style="display: none;" 
+        >加载二维服务
+        </label>       
+        
+        <label>
+        <input
+          type = "button"
+          id="add3DFeatureLayer-btn"
+          style="display: none;" 
+        >加载三维服务
+        </label>  
+      
+
+        <label>
+          <input
+          type = "button"
+          id="addRasterLayer-btn"
+          style="display: none;"
+          >加载二维栅格
+        </label>
+        
+        <form enctype="multipart/form-data"method="post"id="uploadForm">
+          <div class="field">
+            <label class="file-upload">
+              <span style="cursor: pointer;color: rgba(0, 0, 0, 0.9);position: relative;
+              top: 6px;">
+                离线二维服务
+              </span>
+              <input type="file" name="file" id="addoffShp-btn" style="display:none">
+            </label>
+          </div>
+        </form>
+        
+
+        <label>
+          <input
+          type = "button"
+          id="addonRaster-btn"
+          style="display: none"       
+          >加载影像服务
+        </label>
+        
+        <label>
+          <input
+          type = "button"
+          id="statistics-btn"
+          style="display: none;"
+          >统计
+        </label>
+
+        <label>
+          <input
+          type = "button"
+          id="neighborhoodanalysis"
+          style="display: none;"
+        >邻接分析
+        </label>
+
+        <label>
+          <input
+          type = "button"
+          id="bufferanalysis"
+          style="display: none;"
+        >缓冲区分析
+        </label>
+        
+      </div>
+      <div id="overviewDiv"><div id="extentDiv"></div></div>
+      <div class="esri-widget" id ="SearchDiv">
+        <input type="text" id="inputtext" placeholder="请输入你要查询的内容" >
+        <button class="esri-widget"title="查询工具" style="border: none;cursor: pointer;" id="doSearchBtn">查询</button>
+        <p><span id="printResults"></span></p>
+      </div>
+      <div id="toolbarDiv" class="esri-component esri-widget">
+        <button
+          id="distance"
+          class="esri-widget--button esri-interactive esri-icon-measure-line"
+          title="距离量测工具"
+        ></button>
+        <button
+          id="area"
+          class="esri-widget--button esri-interactive esri-icon-measure-area"
+          title="面积量测工具"
+          ></button>
+        <button
+          id="clear"
+          class="esri-widget--button esri-interactive esri-icon-trash"
+          title="清空工具"
+        ></button>
+      </div>
+      <div id="infoDiv">
+        <!-- esri小组件class -->
+        <input
+          class="esri-component esri-widget--button esri-widget esri-interactive"
+          type = "button"
+          id="switch-btn"
+          value="3D"
+        >
+      </div>
+      </div>
+    </body>
+    
+
+    <script>
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/views/SceneView",
+            "esri/core/promiseUtils",
+            "esri/Graphic",
+            "esri/core/reactiveUtils",
+            "esri/widgets/LayerList",
+            "esri/widgets/Home",
+            "esri/widgets/Compass",
+            "esri/widgets/Legend",
+            "esri/widgets/Search",
+            "esri/widgets/BasemapGallery",
+            "esri/widgets/Expand",
+            "esri/layers/FeatureLayer",
+            "esri/layers/MapImageLayer",
+            "esri/widgets/Measurement",
+            "esri/request",
+            "esri/layers/support/Field",
+            "esri/layers/GraphicsLayer",
+            "esri/rest/query",
+            "esri/rest/support/Query",
+            "esri/symbols/SimpleFillSymbol",
+            "esri/geometry/geometryEngine",
+            "esri/Basemap",
+            "esri/widgets/TableList",
+            "esri/widgets/FeatureTable",
+            "esri/layers/SceneLayer",
+            "esri/widgets/Print",
+            "esri/WebScene"
+        ],function(Map,MapView,SceneView,promiseUtils,Graphic,reactiveUtils,LayerList,Home,Compass,Legend,Search,
+        BasemapGallery,Expand,FeatureLayer,MapImageLayer,Measurement,request,Field,GraphicsLayer,query,Query,
+        SimpleFillSymbol,geometryEngine,Basemap,TableList,FeatureTable,SceneLayer,Print,WebScene){
+          let tableList
+          // Create graphics layer and symbol to use for displaying the results of query
+          const resultsLayer = new GraphicsLayer({
+            title:"查询结果图层"
+          });
+          //创建地图
+          var map = new Map({
+              basemap:"topo-vector", //设置底图
+              ground: "world-elevation",  //3D视图的高程图
+              // layers:[resultsLayer] //图源容器图层
+          })
+
+          //开始初始化的时候创建2D视图
+          var view = new MapView({
+              container:"viewDiv", //地图关联html容器
+              map:map, 
+              scale: 50000000,
+              center:[118.32,32.3], //地图中心点
+              zoom:13 //缩放尺度
+          })
+
+          //3维地图
+          var sceneLayer1 = new SceneLayer({
+            portalItem: {
+              id: "2e0761b9a4274b8db52c4bf34356911e"
+            },
+            popupEnabled: false
+          })
+
+          //tif数据图层
+          var sceneLayer=new MapImageLayer({
+            url:"http://localhost:6080/arcgis/rest/services/JianghuaiFenShuiLing/MapServer"
+            
+          })
+          //定义文本注记
+          var labelClass = {
+            symbol:{
+              type:"text",
+              color:"rgba(0,0,0,0.7)",
+              font:{
+                family:"Consolas",
+                size:12,
+                weight:"bold"
+              }
+            },
+            labelPlacement:"above-center",
+            labelExpressionInfo:{
+              expression:"$feature.CITY"
+            }
+          }
+
+          //加载矢量图层
+          var rastermap=new MapImageLayer({
+            url:"http://localhost:6080/arcgis/rest/services/anhuiraster/MapServer",
+            title:"安徽省栅格数据"
+          })
+
+          //鹰眼地图定义
+          var overviewMap = new Map({
+            basemap:"hybrid"
+          })
+
+
+          //鹰眼地图视图
+          var mapView = new MapView({
+            container:"overviewDiv",
+            map:overviewMap,
+            constraints:{
+              rotationEnabled:false  //不允许旋转
+            }
+          })
+
+          //去掉缩略图的ui
+          mapView.ui.components = []
+
+          
+
+          //加载shp图层
+          var shpmap=new FeatureLayer({
+            //使用支持的字段进行展示
+            popupTemplate:{
+              title:"图查属性",
+              content:[
+                {
+                  type:"fields",
+                  fieldInfos:[
+                    {
+                      fieldName:"CITY",
+                      visible:true,
+                      label:"城市",
+                      format:{
+                        places:0,
+                        digitSeparator:true
+                      }
+                    },
+                    {
+                      fieldName:"Test",
+                      visible:true,
+                      label:"测试",
+                      format:{
+                        places:0,
+                        digitSeparator:true
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            labelingInfo:[labelClass],
+            renderer:{ //设置渲染样式
+              type:"simple",
+              label:"面数据",
+              symbol:{
+                type:"simple-fill",
+                color:"rgba(255,222,56,0.5)",
+                size:3,
+                outline: {
+                      color: [255, 255, 255, 0.9],
+                      width: 0.5
+                }
+              }
+            },
+            url:"http://localhost:6080/arcgis/rest/services/anhuitest/FeatureServer/2",
+            title:"安徽省矢量数据"
+          })
+        
+
+          //定义文本注记
+          var pointLabelClass = {
+            symbol:{
+              type:"text",
+              color:"blue",
+              font:{
+                family:"Consolas",
+                size:8,
+                weight:"bold"
+              }
+            },
+            labelPlacement:"above-center",
+            labelExpressionInfo:{
+              expression:"$feature.Id"
+            }
+          }
+
+
+          var pointmap=new FeatureLayer({
+            url:"http://localhost:6080/arcgis/rest/services/anhuitest/FeatureServer/1",
+            popupTemplate:{
+              title:"图查属性",
+              content:[
+                {
+                  type:"fields",
+                  fieldInfos:[
+                    {
+                      fieldName:"Id",
+                      visible:true,
+                      label:"Id",
+                      format:{
+                        places:0,
+                        digitSeparator:true
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            labelingInfo:[pointLabelClass],
+            renderer:{//设置渲染样式
+              type:"simple",
+              label:"点数据",
+              symbol:{
+                style:"square",
+                type:"simple-marker",
+                color:"rgba(15,128,178,0.4)",
+                size:"10px",
+                outline: {
+                      color: [255, 255, 255, 0.9],
+                      width: 0.5
+                }
+              }
+            },
+            title:"安徽省矢量点数据"
+          })
+
+          //定义查询框弹出窗体
+          var popupTemplate={
+            title:"{CITY}",
+            content:[
+                {
+                  type:"fields",
+                  fieldInfos:[
+                    {
+                      fieldName:"CITY",
+                      visible:true,
+                      label:"城市",
+                      format:{
+                        places:0,
+                        digitSeparator:true
+                      }
+                    },
+                    {
+                      fieldName:"Test",
+                      visible:true,
+                      label:"测试",
+                      format:{
+                        places:0,
+                        digitSeparator:true
+                      }
+                    }
+                  ]
+                }
+              ]
+          }
+
+          //全图显示
+          var extentButton = document.getElementById("fullextent-btn")
+
+          extentButton.addEventListener("click",()=>{
+            FullExtentShow()})
+
+          //定义全图显示函数
+          function FullExtentShow(){
+            view.center=[110,30] //地图中心点
+            view.zoom=4
+          }
+
+          //加载三维数据
+          document.getElementById("add3DFeatureLayer-btn").onclick=function(){
+            //先判断当前视图为2D还是3D
+            if(view.type=="2d"){
+              alert("请切换到3D视图!")
+            }else{
+              const scene=new WebScene({
+                portalItem:{
+                  id: "3a9976baef9240ab8645ee25c7e9c096"
+                }
+              })
+              view.map=scene
+              console.log(view)             
+            }
+          }
+          //加载tif数据
+          document.getElementById("addonRaster-btn").onclick=function(){
+            
+            map.add(sceneLayer)
+            view.goTo(sceneLayer)
+          }
+
+          //加载矢量图层          
+          var loadFeatureButton = document.getElementById("addFeatureLayer-btn")
+          loadFeatureButton.addEventListener("click",()=>{
+            loadFeatureLayer()
+          })
+
+          
+          function loadFeatureLayer(){            
+            map.add(shpmap)
+            map.add(pointmap)
+            //地图的图层表里也加入矢量图层
+            map.tables.add(shpmap)
+            map.tables.add(pointmap)
+            
+            map.remove(rastermap)
+          }
+          
+          //加载栅格图层
+          var loadRasterButton = document.getElementById("addRasterLayer-btn")
+          loadRasterButton.addEventListener("click",()=>{
+            loadRasterLayer()
+          })
+
+          function loadRasterLayer(){
+            map.add(rastermap)
+            map.remove(shpmap)
+            map.remove(pointmap)
+          }
+
+          //统计功能代码编写
+          document.getElementById("statistics-btn").onclick=function(){
+            //创建柱状图表
+            if(map.layers.length<=2){
+              alert("请先加载要素图层!")
+              return
+            }
+            //统计的要素字段出现的个数。例如大于某个值的个数（id,这里以点图层的id字段举例，统计大于3的字段个数)
+            //并且能够高亮显示
+            const params = new Query({  //设置查询参数
+              returnGeometry: true,
+              outFields: ["*"]
+            });
+            
+            let queryurl="http://localhost:6080/arcgis/rest/services/anhuitest/FeatureServer/1"
+            //sql语句
+            params.where ="Id>=3"
+            query
+              .executeQueryJSON(queryurl,params)
+              .then(getResults)
+              .catch(promiseRejected);
+
+              function getResults(response){
+
+                var template={
+                  title:"{Id}",
+                  content:[
+                    {
+                      type:"fields",
+                      fieldInfos:[
+                        {
+                          fieldName:"Id",
+                          visible:true,
+                          label:"测试",
+                          format:{
+                            places:0,
+                            digitSeparator:true
+                          }
+                        }
+                      ]
+                    }                 
+                  ]                 
+                }
+
+                const result=response.features.map(function(feature){
+                  feature.popupTemplate=template //设置要素的弹出窗体
+                  return feature
+                })
+                
+                view
+                  .goTo(result)
+                  .then(function(){
+                    view.popup.open({
+                      features:result,
+                      featureMenuOpen:true,
+                      updateLocationEnabled:true
+                  })  
+                })
+              }
+          }
+
+            
+
+          init()
+          //初始化函数：各种小组件、鹰眼地图等
+          function init(){
+          tableList=new TableList({
+            map:map,
+            selectionEnabled:true,
+            listItemCreatedFunction:createAcitons //呼唤showtable菜单,该属性被设计来呼唤菜单
+          })
+
+          //呼唤菜单
+          function createAcitons(event){           
+            let item=event.item
+            console.log(item)
+            item.actionsSections = [
+              [
+                {
+                  // This allows the user to toggle the table on/off within the FeatureTable widget
+                  title: "显示表",
+                  className: "esri-icon-table",
+                  id: "table",
+                  type: "toggle"
+                },
+                {
+                  // This allows the user to access the item's layer information page
+                  title: "图层属性表信息",
+                  className: "esri-icon-description",
+                  id: "information"
+                }
+              ]
+            ];
+          }
+
+          const tableExpand=new Expand({
+            view:view,
+            content:tableList,
+            container:document.createElement("div"),
+            expandIconClass:"esri-icon-table",
+            // expandTitle:"图层属性表" //该属性只读
+            // expandTooltip:"图层集"
+          },"TableList")
+          document.getElementById("TableList").onmouseenter=function(){
+            tableExpand.expanded=true
+          }
+          document.getElementById("TableList").onmouseleave=function(){
+            tableExpand.expanded=false
+          }
+          let featureTable
+          const tableContainer=document.getElementById("tableContainer")
+          async function createTable(layer){ //异步函数
+              const tableDiv=document.createElement("div")
+              tableContainer.appendChild(tableDiv)
+              featureTable=new FeatureTable({
+                view:view,
+                layer:layer,
+                mutiSortEnabled:true, //允许排序
+                editingEnabled:true, //允许编辑要素
+                container:tableDiv
+              })
+          }
+
+          //按滑块按钮触发事件
+          tableList.on("trigger-action",function(event){
+            const item=event.item
+            console.log(item)
+            const id=event.action.id
+            if(id==="table"){
+              if(event.action.value){  //如果按钮被滑动
+                if(featureTable){ //如果表格已经创建，请确保该功能反映正确的图层
+                  if(item.layer.title!=featureTable.layer.title){//如果在不同的层上切换，则为该层创建可调整的特征并启用
+                    //删除原图层表，并且重新根据div创建
+                    featureTable.destroy()
+                    //无论点击哪个滑块都创建图层表
+                    createTable(item.layer).then(function(){
+                      toggleFeatureTable(true)
+                    })
+                  }else{//如果表与featureTable中存储的表相同，即打开/关闭同一个表，则无需重新创建。   
+                    toggleFeatureTable(true)
+                  }
+                }else{ //如果要素图层表没有被创建，创建一个新的，并且打开它
+                  createTable(item.layer).then(function(){
+                      toggleFeatureTable(true)
+                  })
+                }
+              }else{ //活动按钮收回图层
+                toggleFeatureTable(false)
+              }
+            }else if (id === "information") {
+              window.open(item.layer.url);
+            }
+          })
+          //滑块是否被滑动
+          function toggleFeatureTable(showTable) {
+            // Check if the table is displayed, if so, toggle off. If not, display.
+            showTable
+              ? tableContainer.classList.remove("hidden")
+              : tableContainer.classList.add("hidden");
+          }
+          
+          
+
+          const measurement = new Measurement({//距离量测工具
+            view: view,
+          });
+          view.ui.add(measurement,"top-right")
+          var distanceButton=document.getElementById("distance")
+          var areaButton=document.getElementById("area")
+          var clearButton=document.getElementById("clear")
+          distanceButton.addEventListener("click",()=>{
+            distanceMeasurement()
+          })
+          areaButton.addEventListener("click",()=>{
+            areaMeasurement()
+          })
+          clearButton.addEventListener("click",()=>{
+            clearMeasurements()
+          })
+          function distanceMeasurement(){
+            const type = view.type;
+            measurement.activeTool =
+              type.toUpperCase() === "2D" ? "distance" : "direct-line";
+            distanceButton.classList.add("active")
+            areaButton.classList.remove("active")
+          }
+          function areaMeasurement() {
+            measurement.activeTool = "area";
+            distanceButton.classList.remove("active");
+            areaButton.classList.add("active");
+          }
+
+          // Clears all measurements
+          function clearMeasurements() {
+            distanceButton.classList.remove("active");
+            areaButton.classList.remove("active");
+            measurement.clear();
+          }
+          //把图层视图放到expand里面
+          const layerList = new LayerList({  //图层组
+            view: view,
+          });
+          const layerListExpand=new Expand({
+            view:view,
+            content:layerList,
+            expandTooltip:"图层组",
+          })
+          view.ui.add(layerListExpand,"top-left");
+          
+          //绑定对象的容器添加鼠标移动事件
+          layerListExpand.container.onmousemove=function(){
+            layerListExpand.expanded=true
+          }
+          layerListExpand.container.onmouseout=function(){
+            layerListExpand.expanded=false
+          }
+          const homeWidget=new Home({ //home键
+            viewModel:{
+              view:view
+            }
+          },"homeWidget");
+
+
+          const compass=new Compass({ //指南针
+            view:view
+          });
+          view.ui.add(compass,"bottom-left");
+
+          // view.ui.add(compass,"bottom-left");
+          const legend = new Legend({ //图例
+            view: view
+          });
+          view.ui.add(legend,"top-right")
+          const searchWidget=new Search({
+            viewModel:{
+              view:view
+            }
+          },"searchPlace");
+
+          
+          //导出地图小组件
+          view.when(() => {
+            const print = new Print({
+              view: view,
+              printServiceUrl:
+                "https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
+            });
+            var printExpand=new Expand({
+              view:view,
+              content:print,
+              expandTooltip:"导出"
+            },"printMap")
+        });
+
+          var expand =  new Expand({ //图层集
+            content:new BasemapGallery({
+                view:view,
+                // 设定图层集有哪些图层
+                source: [Basemap.fromId("topo-vector"), Basemap.fromId("hybrid"),Basemap.fromId("osm")], // autocasts to LocalBasemapsSource                
+            }),
+            
+          },"BasemapGallery")
+          expand.expanded=true //默认展开
+          document.getElementById("BasemapGallery").onmouseover=function(){
+            expand.expanded=true
+          }
+          document.getElementById("BasemapGallery").onmouseout=function(){
+            expand.expanded=false
+          }
+          
+          //鹰眼地图监听主地图的extent发生变化
+          mapView.when(() => {
+            view.when(() => {
+              setup();
+            });
+          });
+
+          //mapView.stationary是判断当前视图是否静止
+          var extentDebouncer = promiseUtils.debounce(() => {
+          if (mapView.stationary) {  
+            mapView.goTo({
+              center: view.center,
+              scale:view.scale*2*Math.max(view.width / mapView.width,view.height / mapView.height)
+              });
+            }
+          });
+
+          function setup() {
+            //设置框体符号
+            const extent2Dgraphic = new Graphic({
+              geometry: null,
+              symbol: {
+                type: "simple-fill",
+                color: [0, 0, 0, 0.2],
+                outline: null
+              }
+            });
+           mapView.graphics.add(extent2Dgraphic); //添加设置的填充符号 
+
+          reactiveUtils.watch(
+            () => view.extent, //监听底图的全图范围
+            (extent) => {
+              //当视图静止时，同步鹰眼地图位置
+              extentDebouncer().then(() => {
+                extent2Dgraphic.geometry = extent;  //框框的大小是底图的大小
+              });
+            });
+          }
+
+        }
+          
+          //切换视图按钮
+          const switchButton = document.getElementById("switch-btn");
+
+          //input添加点击监听事件，监听switchView函数
+          switchButton.addEventListener("click",()=>{
+            switchView()})
+          
+
+          //切换2D和3D视图
+          function switchView(){
+            mapView.graphics=null //清除图源容器
+            const is3D = view.type==="2d"
+            if(is3D){
+              view = new SceneView({
+                container:"viewDiv", //地图关联html容器
+                map:map, 
+                camera: {
+                  position: [-74.0338, 40.6913, 707],
+                  tilt: 81,
+                  heading: 50
+                }              
+              }),
+              map.add(sceneLayer1)
+              // Create MeshSymbol3D for symbolizing SceneLayer
+              const symbol = {
+                type: "mesh-3d", // autocasts as new MeshSymbol3D()
+                symbolLayers: [
+                  {
+                   type: "fill", // autocasts as new FillSymbol3DLayer()
+                   // If the value of material is not assigned, the default color will be grey
+                    material: {color: [244, 247, 134]}
+                  }
+                ]
+              };
+              // Add the renderer to sceneLayer
+              sceneLayer1.renderer = {
+                type: "simple", // autocasts as new SimpleRenderer()
+                symbol: symbol
+              };
+              mapView.when(() => {
+                view.when(() => {
+                  setup();
+              });
+            });
+            var extentDebouncer = promiseUtils.debounce(() => {
+              if (mapView.stationary) {  //mapView.stationary是判断当前视图是否静止
+                mapView.goTo({
+                  center: view.center,
+                  scale:view.scale*2*Math.max(view.width / mapView.width,view.height / mapView.height)
+                });
+              }
+            });
+
+          function setup() {
+            //设置框体符号
+            const extent3Dgraphic = new Graphic({
+              geometry: null,
+              symbol: {
+                type: "simple-fill",
+                color: [0, 0, 0, 0.2],
+                outline: null
+              }
+            });
+          mapView.graphics.add(extent3Dgraphic); //添加设置的填充符号 
+
+          reactiveUtils.watch(
+            () => view.extent, //监听底图的全图范围
+            (extent) => {
+              //当视图静止时，同步鹰眼地图位置
+              extentDebouncer().then(() => {
+                extent3Dgraphic.geometry = extent;  //框框的大小是底图的大小
+              });
+            },{initial: true});}
+            view.ui.remove('attribution')//这一句用于去除地图下方自带的esri官方的标志
+            switchButton.value="2D"
+            // init()
+            }else{
+              view = new MapView({
+                container:"viewDiv", //地图关联html容器
+                map: map, 
+                scale: 50000000,
+                center:[118.32,32.3], //地图中心点
+                zoom:13 //缩放尺度
+              })
+            switchButton.value="3D"
+            // init()
+            view.ui.remove('attribution')//这一句用于去除地图下方自带的esri官方的标志
+            }
+          }
+
+          //关联加载数据按钮响应事件
+          document.getElementById("addoffShp-btn").addEventListener("change",(event)=>{
+            const fileName=event.target.value.toLowerCase()
+            //判断是不是zip文件
+            if(fileName.indexOf(".zip")!==-1){
+              generateFeatureCollection(fileName)
+            }else{
+              alert("请加载shp的zip文件!")
+            }
+          })
+
+          const portalUrl = "https://www.arcgis.com";
+          function generateFeatureCollection(fileName){
+            let name=fileName.split(".")
+            //在chrome浏览器下移除这个虚拟文件夹
+            name = name[0].replace("c:\\fakepath\\", "");
+
+
+            const params = {
+              name: name,
+              targetSR: view.spatialReference,
+              maxRecordCount: 1000,
+              enforceInputFileSizeLimit: true,
+              enforceOutputJsonSizeLimit: true
+            };            
+            
+            // 将要素拓展到10m以取得更好的性能
+            params.generalize = true;
+            params.maxAllowableOffset = 10;
+            params.reducePrecision = true;
+            params.numberOfDigitsAfterDecimal = 0;
+
+            const myContent = {
+              filetype: "shapefile",
+              publishParameters: JSON.stringify(params),
+              f: "json"
+            };
+
+            // use the REST generate operation to generate a feature collection from the zipped shapefile
+            request(portalUrl + "/sharing/rest/content/features/generate", {
+              query: myContent,
+              body:document.getElementById("uploadForm"),
+              responseType: "json"
+            })
+            .then((response)=>{
+              const layerName =
+                response.data.featureCollection.layers[0].layerDefinition.name;
+              addShapefileToMap(response.data.featureCollection);
+            })
+          }
+          function addShapefileToMap(featureCollection) {
+          // 添加shp数据到图层
+          let sourceGraphics = [];
+
+          const layers = featureCollection.layers.map((layer) => {
+            const graphics = layer.featureSet.features.map((feature) => {
+              return Graphic.fromJSON(feature);
+            });
+            console.log(graphics)
+            sourceGraphics = sourceGraphics.concat(graphics);
+            const featureLayer = new FeatureLayer({
+              objectIdField: "FID",
+              source: graphics,
+              fields: layer.layerDefinition.fields.map((field) => {
+                return Field.fromJSON(field);
+              }),
+              title:"安徽省矢量数据",
+              //使用支持的字段进行展示
+              popupTemplate:{
+                title:"图查属性",
+                content:[
+                  {
+                    type:"fields",
+                    fieldInfos:[
+                      {
+                        fieldName:"CITY",
+                        visible:true,
+                        label:"城市",
+                        format:{
+                          places:0,
+                          digitSeparator:true
+                        }
+                      },
+                      {
+                        fieldName:"Test",
+                        visible:true,
+                        label:"测试",
+                        format:{
+                          places:0,
+                          digitSeparator:true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+            });
+            return featureLayer;           
+          });
+          map.addMany(layers);
+          //定位到添加的图源
+          view.goTo(sourceGraphics).catch((error) => {
+            if (error.name != "AbortError") {
+              console.error(error);
+            }
+          });
+
+          
+        }
+
+
+        
+
+
+        const params = new Query({
+          returnGeometry: true,
+          outFields: ["*"]
+        });
+
+
+        const attributeName = document.getElementById("inputtext");
+
+
+        view.when(function () {
+          document.getElementById("doSearchBtn").addEventListener("click", doQuery);
+        });
+        function  doQuery() {
+          map.add(resultsLayer) //添加查询结果图层
+          resultsLayer.removeAll()
+          let queryurl="http://localhost:6080/arcgis/rest/services/AnHui/FeatureServer/0"
+          //sql语句
+          params.where ="CITY LIKE '%" +attributeName.value+ "%'"
+          query
+            .executeQueryJSON(queryurl,params)
+            .then(getResults)
+            .catch(promiseRejected);
+        }
+
+
+        //查询结果函数
+        function getResults(response) {
+          console.log(response.features)
+          const peakResults = response.features.map(function(feature){
+            feature.symbol={
+              type:"simple-fill",
+              color:[255, 255, 255, 0.9],
+              size:3,
+              outline: {
+                  color: [0, 0, 0, 0.1],
+                  width: "0.5px"
+              }
+            }
+            feature.popupTemplate=popupTemplate
+            return feature
+          })
+          resultsLayer.addMany(peakResults)
+
+          view
+          .goTo(peakResults)
+          .then(function(){
+            view.popup.open({
+              features:peakResults,
+              featureMenuOpen:true,
+              updateLocationEnabled:true
+            })
+          })
+          .catch(function (error) {
+              if (error.name != "AbortError") {
+                console.error(error);
+              }
+          });
+          document.getElementById("printResults").innerHTML =
+            peakResults.length + "结果被查询!";
+        }
+
+        function promiseRejected(error) {
+          console.error("Promise rejected: ", error.message);
+        }
+
+        var neighborhoodanalysis=document.getElementById("neighborhoodanalysis")
+        neighborhoodanalysis.addEventListener("click",()=>{
+          neighborhoodAnalysis()
+        })
+
+        //图源图层
+        const bufferLayer = new GraphicsLayer({
+            title:"邻接分析图层"
+        }) 
+        map.add(bufferLayer)
+        //邻接分析
+        function neighborhoodAnalysis(){
+          view.on("click",function(event){
+            queryFeatures(event)
+          })
+          function queryFeatures(screenPoint){
+            const point = view.toMap(screenPoint)
+            
+            const queryParams = shpmap.createQuery()
+            queryParams.geometry=point
+            //获取鼠标点击点查询到的要素           
+            shpmap.queryFeatures(queryParams).then(function(results){
+              //没有点击到要素图层就清空图层
+              if(!results.features[0]){ 
+                console.log("test")
+                bufferLayer.removeAll()
+              }else{
+
+              //记录被邻接分析的要素
+              const flag_city=results.features[0].attributes.CITY 
+              
+              //对视图上的要素图层进行空间关系查询
+              view.whenLayerView(shpmap).then(function(layerview){
+                let query=new Query()
+                //设置查询图元
+                query.geometry=results.features[0].geometry
+                //设置查询接口的空间关系
+                query.spatialRelationship = "intersects"
+                //查询是否返回图元
+                query.returnGeometry=true
+                shpmap.queryFeatures(query).then(function(result){    
+                  //先清空图源图层              
+                  bufferLayer.removeAll()
+                                
+                  //定义图元的渲染样式
+                  const polySym={
+                    type:"simple-fill",
+                    color:[255, 255, 150, 0.9],
+                    outline:{
+                      color:[0,0,0,0.5],
+                      width:2
+                    }
+                  }               
+                  
+                  //实现邻接分析逻辑
+                  for(var i=0;i<result.features.length;i++){
+                    if(flag_city===result.features[i].attributes.CITY)continue
+
+                    bufferLayer.add(
+                      new Graphic({
+                        geometry: result.features[i].geometry,
+                        symbol: polySym
+                      })
+                                        
+                    )}                                             
+                  })
+                })         
+              } 
+            })
+          
+          }
+        }
+      
+        var bufferAnalysisBtn=document.getElementById("bufferanalysis")
+        bufferAnalysisBtn.addEventListener("click",()=>{
+          BufferAnalysis()
+        })
+
+        var BufferLayer=new GraphicsLayer({
+          title:"缓冲区分析图层"
+        })
+        map.add(BufferLayer)
+      
+        //缓冲区分析
+        function BufferAnalysis(){         
+          view.on("click",function(event){
+            const point = view.toMap(event)  //转换坐标点
+            const queryParams = shpmap.createQuery()
+            queryParams.geometry=point
+            //获取鼠标点击点查询到的要素           
+            shpmap.queryFeatures(queryParams).then(function(results){
+              if(!results.features[0]){ //点击图层以为就清空图源图层
+                console.log("test")
+                BufferLayer.removeAll()
+              }
+            })
+          })
+          var flag=0
+          for (var i=0;i<map.layers.length;i++){
+            if(map.layers.items[i].type!="feature"){
+              flag++
+              if(flag==map.layers.length){
+                alert("请先加载要素图层!")
+              }
+            }else{
+              let queryurl="http://localhost:6080/arcgis/rest/services/AnHui/FeatureServer/0"
+              //sql语句
+              params.where =""
+              //查询所有的feature以便于进行缓冲区分析
+              query.executeQueryJSON(queryurl,params).then(getResultsandAddGeometry)
+
+              
+              function getResultsandAddGeometry(response) {   
+
+                for(var i=0;i<response.features.length;i++){
+
+                  
+                  const polySym={
+                    type:"simple-fill",
+                    color:[255,222,56,0.9],
+                    outline:{
+                      color:[0,0,0,0.5],
+                      width:2
+                    }
+                  }               
+                  const buffer = geometryEngine.geodesicBuffer(
+                    response.features[i].geometry,
+                    10,
+                    "kilometers" //设置缓冲区半径
+                  );
+                  
+                  BufferLayer.add(
+                    new Graphic({
+                      geometry: buffer,
+                      symbol: polySym
+                    })
+                  );
+                }                                                                            
+              }              
+            }
+          }
+        }
+
+          view.ui.remove('attribution')//这一句用于去除地图下方自带的esri官方的标志
+        })
+    </script>
+  </head>
+</html>
