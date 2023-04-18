@@ -18,10 +18,6 @@ export default {
   components: {Header},
   data() {
     return {
-      collapseBtnClass: 'el-icon-s-fold',
-      isCollapsed:false,
-      sideWidth:150,
-      logoTextShow:true,
     }
   },
   methods: {

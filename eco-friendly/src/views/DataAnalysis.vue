@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="first">
 
     <el-row type="flex" justify="space-around">
       <el-col :span="6">
@@ -25,7 +25,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row type="flex"  justify="space-around">
+    <el-row class="second" type="flex"  justify="space-around">
       <el-col :span="6">
         <el-card shadow="hover">
           <div id="echarts-access"></div>
@@ -66,21 +66,30 @@ export default {
       options: [{
         value: '选项1',
         label: '0cm地温表',
-        children:[{value:'2020', label:'2020年'},{value:'2019', label:'2019年'},{value:'2018', label:'2018年'},{value:'2017', label:'2017年'},{value:'2016', label:'2016年'},{value:'2015', label:'2015年'}]
+        children:[]
       },
         {
         value: '选项2',
-        label: '图层2'
+        label: '蒸发表'
       }, {
         value: '选项3',
-        label: '图层3'
+        label: '湿度表'
       }, {
         value: '选项4',
-        label: '图层4'
+        label: '降水表'
       }, {
         value: '选项5',
-        label: '图层5'
-      }],
+        label: '风速表'
+      },{
+          value: '选项6',
+          label: '气压表'
+        },{
+          value: '选项7',
+          label: '日照表'
+        },{
+          value: '选项8',
+          label: '气温表'
+        }],
       value: '',
 
     }
@@ -89,6 +98,14 @@ export default {
 
   },
   mounted() {
+    // 获取 options 数组中的第一个对象
+    const firstOption = this.options[0];
+
+    // 循环生成 1969 年到 2019 年之间的年份数据
+    for (let year = 1969; year <= 2019; year++) {
+      // 将年份转换为字符串，并添加到 firstOption.children 数组中
+      firstOption.children.push({ value: year.toString(), label: `${year}年` });
+    }
     this.createEchartsline()
     this.createEchartscategory()
     this.createEchartsAccess()
@@ -261,20 +278,21 @@ export default {
         }
 
         let temp = []
+        let data =[]
         let now = new Date(1969, 1, 1);
         let oneDay = 24 * 3600 * 1000;
         let value = 0;
         var flag = 0
         for (var i = 0; i < 1000; i++) {
           flag+=1
-          this.history_data.push(randomData(flag));
+          data.push(randomData(flag));
 
         }
 
         option = {
           title: {
-            text: ''+new_val+'平均地表气温时间变化图',
-            left:50
+            text: '1969~2019年'+new_val+'平均地表气温时间变化图',
+            left:'center'
           },
           tooltip: {
             trigger: 'axis',
@@ -312,7 +330,7 @@ export default {
               name: 'Fake Data',
               type: 'line',
               showSymbol: false,
-              data: this.history_data,
+              data: data,
 
             }
           ]
@@ -322,13 +340,14 @@ export default {
           for (var i = 0; i < 5; i++) {
             flag+=1
             //移除数组中第一项
-            // this.history_data.shift();
-            this.history_data.push(randomData(flag))
+            // _this.history_data.shift();
+            data.shift()
+            data.push(randomData(flag))
           }
           myChart.setOption({
             series: [
               {
-                data:  this.history_data
+                data:data
               }
             ]
           });
@@ -387,7 +406,7 @@ export default {
           title: {
             text:'砀山市2017年地表最大和最小温度',
             fontSize: 14,
-            left:80
+            left:'center'
           },
           series: [
             {
@@ -465,7 +484,7 @@ export default {
           },
           title: {
             text: '砀山2017年平均地表气温时间变化图',
-            left:240
+            left:'center'
           },
           xAxis: {
             type: "value",
@@ -583,7 +602,7 @@ export default {
 
           title: {
             text: '安徽省各站点2017年平均地表气温排序图',
-            left: 80
+            left: 'center'
           },
           xAxis: {
             type: 'category',
@@ -656,8 +675,8 @@ export default {
 
         option = {
           title: {
-            text: '砀山平均地表气温2017年时间变化图',
-            left:50
+            text: '砀山平均地表气温1969~2019年时间变化图',
+            left:'center'
           },
           tooltip: {
             trigger: 'axis',
@@ -742,7 +761,7 @@ export default {
           },
           title: {
             text: ''+this.map_name+''+change[1]+'年平均地表气温时间变化图',
-            left:240
+            left:'center'
           },
           xAxis: {
             type: "value",
@@ -815,7 +834,7 @@ export default {
           title: {
             text:''+this.map_name+''+change[1]+'年市地表最大和最小温度',
             fontSize: 14,
-            left:80
+            left:'center'
           },
           series: [
             {
@@ -899,8 +918,8 @@ export default {
 
         option = {
           title: {
-            text: ''+this.map_name+''+change[1]+'年平均地表气温时间变化图',
-            left:50
+            text: ''+this.map_name+'1969~2019年平均地表气温时间变化图',
+            left:'center'
           },
           tooltip: {
             trigger: 'axis',
@@ -948,8 +967,8 @@ export default {
           for (var i = 0; i < 5; i++) {
             flag+=1
             //移除数组中第一项
-            this.history_data.shift();
-            this.history_data.push(randomData(flag))
+            data.shift();
+            data.push(randomData(flag))
           }
           myChart.setOption({
             series: [
@@ -997,7 +1016,7 @@ export default {
 
           title: {
             text: '安徽省各站点'+change[1]+'年平均地表气温排序图',
-            left: 80
+            left: 'center'
           },
           xAxis: {
             type: 'category',
@@ -1121,23 +1140,7 @@ export default {
         title:"安徽省站点"
       })
       m_Map.add(m_FeatureLayer)
-      // view.on("click",function (event){
-      //   var point = view.toMap(event)
-      //
-      //   var ptType = point.type;
-      //
-      //   let queryparams = m_FeatureLayer.createQuery()
-      //
-      //   queryparams.where = "station = '亳州'"
-      //
-      //   // queryparams.geometry = point
-      //   // queryparams.returnGeometry = true;
-      //   // queryparams.distance = 2;
-      //   // console.log(ptType)
-      //   m_FeatureLayer.queryFeatures(queryparams).then((results)=>{
-      //     console.log(results)
-      //   })
-      // })
+
       var station_name = ""
       // 获取点击要素信息
       view.on("click",function (event){
@@ -1148,14 +1151,6 @@ export default {
         })
       })
 
-      // function test(response){
-      //   if(response.results.length){
-      //     const graphic = response.results.filter(function (result) {
-      //       return result.graphic.layer === m_FeatureLayer;
-      //     })[0].graphic;
-      //     console.log(graphic)
-      //   }
-      // }
 
 
       view.ui.remove('attribution')//这一句用于去除地图下方自带的esri官方的标志
@@ -1168,6 +1163,9 @@ export default {
 </script>
 
 <style scoped>
+.first,.second{
+  padding-top: 20px;
+}
 #viewDiv {
   padding: 0;
   margin: 0;
@@ -1175,23 +1173,23 @@ export default {
   width: 100%;
 }
 #echarts-line{
-  height: 400px;
+  height: 40vh;
   width: 100%;
 }
 #echarts-category{
-  height: 400px;
+  height: 40vh;
   width: 100%;
 }
 #echarts-access{
-  height: 350px;
+  height: 35vh;
   width: 100%;
 }
 #echarts-scatter{
-  height: 350px;
+  height: 35vh;
   width: 100%;
 }
 #echarts-pressure{
-  height: 350px;
+  height: 35vh;
   width: 100%;
 }
 </style>

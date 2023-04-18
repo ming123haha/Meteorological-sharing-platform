@@ -1,39 +1,36 @@
 <template>
-  <body id="poster">
   <div id="div">
     <video id="video" muted src="../assets/background.mp4" autoplay loop></video>
-    <div style="position:relative;top:100px" class="title">
-      <h1 class="h1style">基于WebGIS的安徽省气象数据信息共享平台</h1>
+    <div style="position:absolute;top:80px" class="title">
+      <h1 class="h1style">基于气象预测模型的气象数据与共享平台</h1>
     </div>
-    <div class="container">
-      <h1 class="login_title">Please Login</h1>
-      <el-form :model="loginForm" :rules="rules" ref="userForm">
-        <span style="color:#505458; font-size:18px;position: relative;top:55px;left:-20px"> 用户名 </span>
-        <el-form-item prop="username" style="margin:30px 50px;">
-          <el-input type="text" size="medium" style="width:250px;" prefix-icon="el-icon-user"
-                    v-model="loginForm.username" placeholder="请输入用户名" autocomplete="off"></el-input>
-        </el-form-item>
-        <span style="color:#505458; font-size:18px;position: relative;top:-10px;left:-5px"> 密码 </span>
-        <el-form-item prop="password" style="margin:-40px 0px">
-          <el-input type="password" size="medium" style="width:250px;" prefix-icon="el-icon-lock" show-password
-                    v-model="loginForm.password" placeholder="请输入密码" autocomplete="off"></el-input>
-        </el-form-item>
-        <span></span>
-        <span></span>
-        <el-form-item style="margin:60px 0px">
-          <el-button style="position: relative; background-color:#505458;right:75px;width: 90px;border:none;" type="primary"
-                     size="big" autocomplete="off" @click="register">
-            <span style="font-size: 15px">注册</span>
-          </el-button>
-          <el-button style="position: relative; background-color:#505458;left:40px;width: 90px;border:none;" type="primary"
-                     size="big" autocomplete="off" @click="login">
-            <span style="font-size: 15px">登录</span>
-          </el-button>
-        </el-form-item>
-      </el-form>
+    <div class="box">
+      <div class="form">
+        <h1 class="login_title">Please Login</h1>
+        <el-form :model="loginForm" :rules="rules" ref="userForm">
+          <el-form-item prop="username">
+            <el-input type="text" size="medium" style="width:300px;" prefix-icon="el-icon-user"
+                            v-model="loginForm.username" placeholder="请输入用户名" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input type="password" size="medium" style="width:300px;" prefix-icon="el-icon-lock" show-password
+                      v-model="loginForm.password" placeholder="请输入密码" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="success" style="width: 78px;height: 40px ;position: absolute;left: -120%;" size="medium" @click="register">
+              注册
+            </el-button>
+            <el-button type="primary" style="width: 78px;height: 40px;position: relative;right: -120%" size="medium" @click="login">
+              登录
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
+<!--    <div class="container">-->
+<!--    </div>-->
   </div>
-  </body>
+
 </template>
 
 <script>
@@ -41,6 +38,7 @@ export default {
   name: "login",
   data(){
     return{
+      username:'',
       loginForm:{},
       rules: {
         username: [
@@ -81,11 +79,62 @@ export default {
 </script>
 
 <style scoped>
+.box{
+  top:28%;
+  position: absolute;
+  width: 380px;
+  height: 420px;
+  background-color: rgba(255,255,255,.3);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.box::before{
+  content: '';
+  position: absolute;
+  top:-50%;
+  left:-50%;
+  width: 380px;
+  height: 420px;
+  background: linear-gradient(0deg,transparent,#45f3ff,#45f3ff);
+  transform-origin: bottom right;
+  animation: animate 6s linear infinite;
+}
+.box::after{
+  content: '';
+  position: absolute;
+  top:-50%;
+  left:-50%;
+  width: 380px;
+  height: 420px;
+  background: linear-gradient(0deg,transparent,#45f3ff,#45f3ff);
+  transform-origin: bottom right;
+  animation: animate 6s linear infinite;
+  animation-delay: -3s;
+}
+@keyframes animate {
+  0%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
+.form{
+  position: absolute;
+  inset:2px;
+  border-radius: 20px;
+  background-color: rgba(255,255,255);
+  z-index: 10;
+
+}
 * {
+  margin:0;
+  padding: 0;
   box-sizing: border-box;
 }
 .h1style{
-  font-size: var(--calcite-font-size-8);
+  /*font-size: var(--calcite-font-size-8);*/
+  font-size: 60px;
   text-align: center;
   background-image: linear-gradient(
     to right,
@@ -98,13 +147,7 @@ export default {
   background-clip:text
 }
 
-#poster{
-  background-position: center;
-  height: 100%;
-  width: 100%;
-  background-size: cover;
-  position: fixed;
-}
+
 .login_title{
   margin: 0px auto 40px auto;
   text-align: center;
@@ -116,26 +159,10 @@ div{
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden;
-
-}
-.container {
-  border-radius: 15px;
-  background-clip: padding-box;
-  margin: 200px auto;
-  background:#ffffff;
-  padding: 40px 10px 40px 40px;
-  border: 1px solid #eaeaea;
-  box-shadow: 0 0 25px #cac6c6;
+  justify-content: center;
 
 }
 
-.container h1 {
-  text-align: center;
-  position:relative;
-  top:40px;
-  left:-20px
-}
 
 button:hover {
   background: #505458;

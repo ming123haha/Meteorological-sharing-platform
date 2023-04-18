@@ -115,6 +115,7 @@ public class GroundtemperatureMergeController {
         for(int i = 0;i<An_Hui_name.length;i++){
             if(An_Hui_name[i].equals(name)){
                 flag = i;
+                break;
             }
         }
         String[] An_Hui_station=new String[]{"58015","58102","58118","58122","58203","58215","58221",

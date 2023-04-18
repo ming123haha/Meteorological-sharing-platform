@@ -1,41 +1,50 @@
 <template>
-  <div style="">
-    <div style="position: absolute;top:50%;left: 50%;transform: translate(-50%,-50%)">
-<!--      <img src="../assets/logo.png" style="height: 40px;margin-right: 8px" alt="">-->
-      <span class="neon" style="font-size: 18px">
-        基于WebGIS的安徽省气象数据信息共享平台
-      </span>
-    </div>
-      <!--菜单部分-->
+  <div>
+    <div class="menu-container">
       <el-menu
           background-color="#204F71"
           text-color="#fff"
           active-text-color="#3eede7"
-          router
           mode="horizontal"
-          style="position: absolute;left: 26%"
+          router
+          class="menu"
       >
-        <el-menu-item index="/DataAnalysis"><i class="el-icon-map-location" style=""></i>
-        地图主页</el-menu-item>
-        <el-menu-item index="/DataPanel"><i class="el-icon-data-analysis" style=""></i>
-        数据面版</el-menu-item>
-        <el-menu-item style="position:absolute;right: -195%" index="/datasearch"><i class="el-icon-edit-outline" ></i>
-          气象预测</el-menu-item>
-        <el-menu-item style="position:absolute;left: 295%" index="/HomeMap"><i class="el-icon-set-up" style=""></i>
-          空间插值</el-menu-item>
-        <!--        <el-menu-item index="/SpatialAnalysis"><i class="el-icon-set-up" style=""></i>-->
-        <!--          交易分析</el-menu-item>-->
+        <div class="left-items">
+          <el-menu-item index="/DataAnalysis" style="margin-right: 20px;">
+            <i class="el-icon-map-location"></i>
+            地图主页
+          </el-menu-item>
+          <el-menu-item index="/DataPanel" style="margin-right: -200px;">
+            <i class="el-icon-data-analysis"></i>
+            数据面版
+          </el-menu-item>
+        </div>
+        <div class="center-item">
+        <span class="neon" style="font-size: 18px;">
+          基于气象预测模型的气象数据与共享平台
+        </span>
+        </div>
+        <div class="right-items">
+          <el-menu-item index="/datasearch" style="margin-left: -200px;">
+            <i class="el-icon-edit-outline"></i>
+            气象预测
+          </el-menu-item>
+          <el-menu-item index="/HomeMap" style="margin-left: 20px;">
+            <i class="el-icon-set-up"></i>
+            空间插值
+          </el-menu-item>
+        </div>
       </el-menu>
+          <el-dropdown style="cursor: pointer; position: absolute; right: 0;" >
+            <span style="color: white;margin-right: 10px">{{ user.username }}</span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>
+                <router-link to="/login"style="text-decoration: none">退出</router-link>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+    </div>
 
-<!--     显示用户名   -->
-    <el-dropdown style="position: absolute;right: 20px;cursor: pointer" >
-      <span>{{ user.username }}</span> <i class="el-icon-arrow-down" style="color:#fff;margin-left: 5px;margin-top: 25px"></i>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>
-          <router-link to="/login"style="text-decoration: none">退出</router-link>
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
   </div>
 </template>
 
@@ -94,9 +103,34 @@ export default {
 </script>
 
 <style scoped>
-span {
-  color:white;
-  font-size:15px;
+.menu-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.left-items {
+  display: flex;
+  align-items: center;
+}
+
+.right-items {
+  display: flex;
+  align-items: center;
+}
+
+.center-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .el-menu-item {
   font-size: 15px;
@@ -123,14 +157,7 @@ span {
     /*lightblue, 0 0 15px #0939ef, 0 0 20px skyblue, 0 0 25px skyblue, 0 0 30px skyblue;*/
   }
 }
-.time{
-  font-family: 微软雅黑;
-  font-style:oblique;
-  font-weight:800;
-  color: #fff;
-  -webkit-animation: shining 0.5s alternate infinite;
-  animation: shining 1s alternate infinite;
-}
+
 @-webkit-keyframes shining {
   from {
     text-shadow: 0 0 10px rgb(10, 25, 66), 0 0 20px
